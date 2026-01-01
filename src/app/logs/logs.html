@@ -1,0 +1,33 @@
+<div class="logs-container">
+    <h2 style="color: var(--primary-color); margin-bottom: 1rem;">System Logs</h2>
+
+    <div
+        style="background: rgba(59, 130, 246, 0.1); border: 1px solid #3b82f6; color: #93c5fd; padding: 1rem; border-radius: 8px; margin-bottom: 2rem;">
+        <strong>System Status:</strong> Displaying {{logs.length}} records.
+    </div>
+
+    <div class="card" style="padding: 0; overflow: hidden;">
+        <!-- BUG: DOM Overload -->
+        <!-- Rendering 10k items with standard *ngFor triggers massive layout/painting cost -->
+        <div class="log-list" style="height: 600px; overflow-y: auto;">
+            @for (log of logs; track log.id) {
+            <div class="log-item" style="
+                    display: flex; 
+                    gap: 1rem; 
+                    padding: 8px 16px; 
+                    border-bottom: 1px solid var(--border-color);
+                    font-family: monospace;
+                    font-size: 0.9rem;
+                    align-items: center;
+                ">
+                <span style="color: #666; width: 180px;">{{ log.timestamp }}</span>
+                <span [style.color]="getSeverityColor(log.severity)" style="width: 60px; font-weight: bold;">
+                    {{ log.severity }}
+                </span>
+                <span style="color: var(--primary-color); width: 100px;">[{{ log.module }}]</span>
+                <span style="color: var(--text-color); flex: 1;">{{ log.message }}</span>
+            </div>
+            }
+        </div>
+    </div>
+</div>
