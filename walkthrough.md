@@ -13,7 +13,6 @@
 *   **Scenario**: User tries to login.
 *   **Bugs**:
     *   **Credential Leak**: The console logs the username and password in plain text upon submission.
-    *   **Credential Leak**: The console logs the username and password in plain text upon submission.
 
 
 ### 2. Performance (Dashboard)
@@ -27,7 +26,7 @@
 *   **Bugs**:
     *   **Accessibility**: The "Add +" button has extremely low contrast (Yellow text on Amber background).
     *   **Responsiveness**: The ingredient description uses `white-space: nowrap` without overflow handling, causing the content to break the card layout on smaller screens.
-    *   **XSS Vulnerability**: The ingredient description field supports "Rich Text" by bypassing Angular's security trust. It allows unsanitized HTML, enabling XSS via the description input (e.g., `<img src=x onerror=alert('XSS')>`).
+    *   **XSS Vulnerability**: The ingredient "Notes" field allows unsanitized HTML input. While there is no explicit hint, the application uses `[innerHTML]` to render the text, enabling script injection (e.g., `<img src=x onerror=alert('XSS')>`).
 
 ### 4. Change Detection (Inventory)
 *   **Scenario**: Monitoring stock arriving in real-time.
