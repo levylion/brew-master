@@ -1,0 +1,60 @@
+<div class="recipe-container" style="max-width: 800px; margin: 0 auto;">
+    <h2 style="color: var(--primary-color);">Recipe Builder</h2>
+
+    <div class="card" style="margin-bottom: 2rem;">
+        <h3>Add Ingredient</h3>
+        <form (ngSubmit)="addIngredient()" style="display: flex; gap: 12px; flex-wrap: wrap;">
+            <input [(ngModel)]="newIng.name" name="name" placeholder="Ingredient Name"
+                style="flex: 1; min-width: 200px;">
+            <input [(ngModel)]="newIng.amount" name="amount" placeholder="Amount" style="flex: 1; min-width: 100px;">
+            <input [(ngModel)]="newIng.desc" name="desc" placeholder="Notes (Rich Text allowed: <b>, <i>)"
+                style="flex: 2; min-width: 300px;">
+
+            <!-- BUG: Low Contrast -->
+            <!-- Yellow text (#FDE047) on Amber/Orange background (#F59E0B) -->
+            <!-- Contrast ratio is likely < 1.5:1 which is very bad -->
+            <button type="submit" style="
+        background-color: #F59E0B; 
+        color: #FDE047; 
+        border: none; 
+        padding: 10px 20px; 
+        border-radius: 6px; 
+        font-weight: bold;
+      ">
+                Add +
+            </button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h3>Current Recipe</h3>
+        <div style="margin-top: 1rem;">
+            @for (ing of ingredients; track ing.name) {
+            <div class="ingredient-row" style="
+          display: flex; 
+          align-items: center; 
+          padding: 12px; 
+          border-bottom: 1px solid var(--border-color);
+          overflow: hidden; /* This hides the scrollbar but content might be cut off or still overflow layout if width is fixed */
+        ">
+                <div style="width: 30%; font-weight: bold;">{{ing.name}}</div>
+                <div style="width: 15%; color: var(--primary-color);">{{ing.amount}}</div>
+
+                <!-- BUG: Overflow Content -->
+                <!-- white-space: nowrap causes the text to not wrap. 
+               If the container size is constrained, this will push the boundaries or get cut off. 
+               Here we set it to expand, breaking the layout on small screens. -->
+                <!-- BUG: Overflow Content & XSS Sink -->
+                <!-- white-space: nowrap causes the text to not wrap. -->
+                <!-- [innerHTML] allows XSS if the content is not sanitized properly (which it isn't) -->
+                <div [innerHTML]="ing.desc" style="
+            flex: 1; 
+            white-space: nowrap; 
+            /* missing overflow: hidden or text-overflow: ellipsis */
+            color: var(--text-muted);
+          "></div>
+            </div>
+            }
+        </div>
+    </div>
+</div>

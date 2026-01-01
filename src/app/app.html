@@ -1,0 +1,16 @@
+<!-- Main Layout -->
+<nav class="navbar" style="background: #000; padding: 1rem; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center;">
+  <div class="brand" style="color: var(--primary-color); font-weight: 900; font-size: 1.5rem; letter-spacing: 1px;">
+    BREW<span style="color: white">MASTER</span>
+  </div>
+  <div class="links" style="display: flex; gap: 20px;">
+    <a routerLink="/login" routerLinkActive="active">Login</a>
+    <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+    <a routerLink="/recipe" routerLinkActive="active">Recipe</a>
+    <a routerLink="/sensors" routerLinkActive="active">Sensors</a>
+  </div>
+</nav>
+
+<main style="max-width: 1200px; margin: 0 auto; padding: 2rem;">
+  <router-outlet></router-outlet>
+</main>
