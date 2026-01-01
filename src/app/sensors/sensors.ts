@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -10,9 +10,9 @@ import { CommonModule } from '@angular/common';
 })
 export class SensorsComponent implements OnInit, OnDestroy {
   pollingId: any;
-  sensorData: any = { temp: 20, pressure: 5 };
-  lastUpdated: string = 'Never';
-  error: string | null = null;
+  sensorData = signal<any>({ temp: 20, pressure: 5 });
+  lastUpdated = signal<string>('Never');
+  error = signal<string | null>(null);
 
   ngOnInit() {
     // BUG: Network Polling 404
@@ -28,13 +28,13 @@ export class SensorsComponent implements OnInit, OnDestroy {
           return response.json();
         })
         .then(data => {
-          this.sensorData = data;
-          this.lastUpdated = new Date().toLocaleTimeString();
-          this.error = null;
+          this.sensorData.set(data);
+          this.lastUpdated.set(new Date().toLocaleTimeString());
+          this.error.set(null);
         })
         .catch(err => {
           console.error('Sensor Fetch Error:', err);
-          this.error = 'Connection lost. Retrying...';
+          this.error.set('Connection lost. Retrying...');
         });
     }, 2000);
   }

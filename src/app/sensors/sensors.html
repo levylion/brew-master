@@ -4,16 +4,16 @@
     <div class="card" style="margin-bottom: 2rem;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
             <h3>Real-time Data</h3>
-            <span class="status-indicator" [style.background]="error ? 'red' : 'green'"
+            <span class="status-indicator" [style.background]="error() ? 'red' : 'green'"
                 style="padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; color: white;">
-                {{ error ? 'OFFLINE' : 'ONLINE' }}
+                {{ error() ? 'OFFLINE' : 'ONLINE' }}
             </span>
         </div>
 
-        @if (error) {
+        @if (error()) {
         <div
             style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #fca5a5; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
-            ⚠️ {{ error }} (Check Network Tab)
+            ⚠️ {{ error() }} (Check Network Tab)
         </div>
         }
 
@@ -23,33 +23,33 @@
             <!-- Temperature -->
             <div style="background: #2a2a2a; padding: 1.5rem; border-radius: 8px; text-align: center;">
                 <div style="font-size: 3rem; font-weight: bold; color: var(--primary-color);">
-                    {{ sensorData.temp }}°C
+                    {{ sensorData().temp }}°C
                 </div>
                 <div style="color: var(--text-muted);">Temperature</div>
                 <!-- Fake graph bar -->
                 <div style="height: 4px; width: 100%; background: #444; margin-top: 1rem; border-radius: 2px;">
                     <div style="height: 100%; background: var(--primary-color); transition: width 0.5s;"
-                        [style.width.%]="(sensorData.temp / 40) * 100"></div>
+                        [style.width.%]="(sensorData().temp / 40) * 100"></div>
                 </div>
             </div>
 
             <!-- Pressure -->
             <div style="background: #2a2a2a; padding: 1.5rem; border-radius: 8px; text-align: center;">
                 <div style="font-size: 3rem; font-weight: bold; color: #3b82f6;">
-                    {{ sensorData.pressure }} PSI
+                    {{ sensorData().pressure }} PSI
                 </div>
                 <div style="color: var(--text-muted);">Pressure</div>
                 <!-- Fake graph bar -->
                 <div style="height: 4px; width: 100%; background: #444; margin-top: 1rem; border-radius: 2px;">
                     <div style="height: 100%; background: #3b82f6; transition: width 0.5s;"
-                        [style.width.%]="(sensorData.pressure / 15) * 100"></div>
+                        [style.width.%]="(sensorData().pressure / 15) * 100"></div>
                 </div>
             </div>
 
         </div>
 
         <div style="text-align: right; margin-top: 1rem; color: #666; font-size: 0.8rem;">
-            Last updated: {{ lastUpdated }}
+            Last updated: {{ lastUpdated() }}
         </div>
     </div>
 </div>
