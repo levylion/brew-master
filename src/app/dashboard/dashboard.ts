@@ -37,6 +37,16 @@ export class DashboardComponent implements OnInit {
 
       this.leakyData.push(metric);
 
+      // Make the leak "discoverable" for the agent via Console
+      if (this.leakyData.length % 200 === 0) {
+        console.warn(`[System Alert] Memory usage rising rapidly! ${this.leakyData.length} unoptimized metrics in memory.`);
+      }
+
+      // Force a GC pressure warning occasionally
+      if (this.leakyData.length % 1000 === 0) {
+        console.error('[Critical] Potential Memory Leak detected in DashboardComponent. Heap limit approaching.');
+      }
+
       // Log occasionally so we see it's alive
       if (this.leakyData.length % 500 === 0) {
         console.log(`[Memory Leak] Array size: ${this.leakyData.length} objects`);
