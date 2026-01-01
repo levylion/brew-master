@@ -29,7 +29,12 @@
     *   **Responsiveness**: The ingredient description uses `white-space: nowrap` without overflow handling, causing the content to break the card layout on smaller screens.
     *   **XSS Vulnerability**: The ingredient description field supports "Rich Text" by bypassing Angular's security trust. It allows unsanitized HTML, enabling XSS via the description input (e.g., `<img src=x onerror=alert('XSS')>`).
 
-### 4. Network (Sensors)
+### 4. Change Detection (Inventory)
+*   **Scenario**: Monitoring stock arriving in real-time.
+*   **Bugs**:
+    *   **UI Freeze (OnPush Mutation)**: The component uses `ChangeDetectionStrategy.OnPush` but updates the stock list by pushing to an existing array (mutation) instead of creating a new reference. As a result, new items arrive in the background (visible in console), but the UI does not update.
+
+### 5. Network (Sensors)
 *   **Scenario**: Monitoring realtime fermentation data.
 *   **Bugs**:
     *   **404 Loop**: The component continuously polls `/api/sensors/data.json` every 2 seconds. Since this endpoint doesn't exist, the Network tab is flooded with red 404 errors.
@@ -55,5 +60,5 @@ Ask the Chrome DevTools MCP Agent to:
 
 2.  "Analyze the Dashboard performance and fix the layout thrashing."
 3.  "Fix the visual bugs and security issues in the Recipe page."
-
-4.  "Debug why the Sensor page is showing an error."
+4.  "Investigate why the Inventory list isn't updating."
+5.  "Debug why the Sensor page is showing an error."
