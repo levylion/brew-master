@@ -4,12 +4,14 @@
     <div
         style="background: rgba(59, 130, 246, 0.1); border: 1px solid #3b82f6; color: #93c5fd; padding: 1rem; border-radius: 8px; margin-bottom: 2rem;">
         <strong>System Status:</strong> Displaying {{logs.length}} records.
+        <span style="float: right; font-size: 0.9rem; opacity: 0.8;">↘️ Drag bottom-right of list to test Resize
+            Performance</span>
     </div>
 
     <div class="card" style="padding: 0; overflow: hidden;">
         <!-- BUG: DOM Overload -->
         <!-- Rendering 20k complex items triggers massive layout/painting cost -->
-        <div class="log-list" style="height: 600px; overflow-y: auto;">
+        <div class="log-list" style="height: 600px; overflow: auto; resize: vertical; min-height: 200px;">
             @for (log of logs; track log.id) {
             <div class="log-item" style="
                     position: relative;
