@@ -53,15 +53,17 @@ export class LogsComponent implements OnInit {
     }
   }
 
-  // BUG: CPU Intensive task run in template!
-  calculateRiskFactor(id: number): number {
-    // Artificial lag: Busy wait
-    let start = performance.now();
-    while (performance.now() - start < 0.1) {
-      // Burn 0.1ms per item. 
-      // 20,000 items * 0.1ms = 2000ms (2 seconds) of pure CPU blocking on every check
+  // Interaction Lag:
+  // With 20k items, simply handling an event and triggering CD makes the browser hang
+  activeMenuId: number | null = null;
+
+  toggleMenu(id: number) {
+    if (this.activeMenuId === id) {
+      this.activeMenuId = null;
+    } else {
+      this.activeMenuId = id;
     }
-    return Math.random();
+    console.log('Menu toggled for:', id);
   }
 
   trackById(index: number, item: any): number {
