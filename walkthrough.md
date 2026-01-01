@@ -32,8 +32,8 @@
 ### 4. Change Detection (Inventory)
 *   **Scenario**: Monitoring stock arriving in real-time.
 *   **Bugs**:
-    *   **Visual Trap (Auto Refresh)**: The page features an "Auto Refresh" toggle. When enabled, the user expects the list to update automatically as new items arrive. However, due to the bug, enabling this toggle does nothing visible, acting as a red herring.
-    *   **Resolution**: Clicking the small "Refresh" icon 🔄 triggers a manual change detection cycle, momentarily updating the list. The Fix is to use spread syntax `[...this.items, newItem]` or `markForCheck()`.
+    *   **Visual Trap (Auto Refresh)**: The page features an "Auto Refresh" toggle. When enabled, the user expects the list to update automatically as new items arrive. However, the toggle event is bound **outside of Angular's Zone**, so interacting with it intentionally does *not* trigger change detection. This makes it a "hard" trap: the UI remains completely frozen despite user interaction.
+    *   **Resolution**: Clicking the small "Refresh" icon 🔄 triggers a manual change detection cycle. The Fix is to use spread syntax or `markForCheck()`.
 
 ### 5. Network (Sensors)
 *   **Scenario**: Monitoring realtime fermentation data.

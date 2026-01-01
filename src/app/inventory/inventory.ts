@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnInit, OnDestroy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, OnDestroy, NgZone, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -10,19 +10,30 @@ import { CommonModule } from '@angular/common';
   // BUG: OnPush Change Detection
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class InventoryComponent implements OnInit, OnDestroy {
+export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
+  @ViewChild('autoRefreshToggle') autoRefreshToggle!: ElementRef;
   items: string[] = ['25kg Pale Malt', '10kg Wheat Malt', '5kg Crystal 60L'];
   intervalId: any;
   lastAdded: string = 'None';
   autoRefreshEnabled: boolean = false;
 
+  constructor(private ngZone: NgZone) { }
+
   ngOnInit() {
     this.startRestocking();
   }
 
-  toggleAutoRefresh() {
-    this.autoRefreshEnabled = !this.autoRefreshEnabled;
-    // Even if enabled, the array mutation bug prevents updates!
+  ngAfterViewInit() {
+    // TRAP: We bind the event MANUALLY outside of Angular's zone.
+    // This ensures that clicking the toggle does NOT trigger Change Detection.
+    // The checkbox will visually toggle (native browser behavior), but the 
+    // component view (the items list) will NOT update.
+    this.ngZone.runOutsideAngular(() => {
+      this.autoRefreshToggle.nativeElement.addEventListener('change', () => {
+        this.autoRefreshEnabled = !this.autoRefreshEnabled;
+        console.log('Auto Refresh Toggled (Outside Zone):', this.autoRefreshEnabled);
+      });
+    });
   }
 
   startRestocking() {

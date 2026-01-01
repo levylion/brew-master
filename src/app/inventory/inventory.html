@@ -20,7 +20,7 @@
 
             <div style="display: flex; align-items: center; gap: 10px;">
                 <label style="cursor: pointer; display: flex; align-items: center; gap: 8px;">
-                    <input type="checkbox" [checked]="autoRefreshEnabled" (change)="toggleAutoRefresh()">
+                    <input #autoRefreshToggle type="checkbox" [checked]="autoRefreshEnabled">
                     <span style="font-size: 0.9rem;">Auto Refresh</span>
                 </label>
 
