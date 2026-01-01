@@ -19,7 +19,7 @@
 ### 2. Performance (Dashboard)
 *   **Scenario**: Viewing the active brew batches and system status.
 *   **Bugs**:
-    *   **Layout Thrashing**: The "System Status" card contains a hidden interval that forces layout recalculations (read/write loop) every 50ms, causing high CPU usage and frame drops.
+    *   **Memory Leak**: An RxJS `interval` subscription creates large objects and pushes them into an array every 20ms. The subscription is never cleaned up, and the array grows indefinitely, eventually causing high memory usage and GC stutter.
     *   **LCP Violation**: The "Live Brewery Cam" loads a 4K unoptimized image from Unsplash, effectively destroying the Largest Contentful Paint score.
 
 ### 3. CSS & UI (Recipe Builder)
@@ -58,7 +58,7 @@
 Ask the Chrome DevTools MCP Agent to:
 1.  "Audit the Login page for credential leaks."
 
-2.  "Analyze the Dashboard performance and fix the layout thrashing."
+2.  "Analyze the Dashboard performance and find the memory leak."
 3.  "Fix the visual bugs and security issues in the Recipe page."
 4.  "Investigate why the Inventory list isn't updating."
 5.  "Debug why the Sensor page is showing an error."

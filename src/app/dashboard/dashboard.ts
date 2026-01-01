@@ -1,5 +1,6 @@
-import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { interval } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -8,10 +9,12 @@ import { CommonModule } from '@angular/common';
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
-export class DashboardComponent implements OnInit, OnDestroy {
-  @ViewChild('thrashingTarget') thrashingTarget!: ElementRef;
+export class DashboardComponent implements OnInit {
+  // No ViewChild needed for memory leak
 
-  intervalid: any;
+  // BUG: Memory Leak (Unbounded Array)
+  // We will push data here endlessly
+  leakyData: any[] = [];
 
   batches = [
     { name: 'Golden Ale', status: 'Fermenting', date: '2023-10-25', icon: '🍺' },
@@ -20,25 +23,29 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ];
 
   ngOnInit() {
-    // BUG: Layout Thrashing / Forced Reflow
-    // This interval forces the browser to recalculate layout every 100ms
-    // by reading a layout property (offsetHeight) and then writing to style.
-    this.intervalid = setInterval(() => {
-      if (this.thrashingTarget) {
-        const el = this.thrashingTarget.nativeElement;
-        // READ
-        const height = el.offsetHeight;
-        // WRITE
-        el.style.height = (height + (Math.random() > 0.5 ? 1 : -1)) + 'px';
-        // READ AGAIN (Forces layout)
-        const newHeight = el.offsetHeight;
-        // WRITE AGAIN
-        el.style.width = (newHeight + 100) + 'px';
+    // BUG: RxJS Memory Leak
+    // We subscribe to an interval but NEVER unsubscribe (no takeUntil, no async pipe, no unsubscribe in ngOnDestroy)
+    // Every 10ms we push a relatively large object to the array.
+    interval(20).subscribe(() => {
+      // Create a dummy object to consume memory
+      const metric = {
+        timestamp: new Date(),
+        id: Math.random(),
+        data: new Array(1000).fill('x').join(''), // ~1KB string
+        overhead: document.createElement('div') // Detached DOM node reference
+      };
+
+      this.leakyData.push(metric);
+
+      // Log occasionally so we see it's alive
+      if (this.leakyData.length % 500 === 0) {
+        console.log(`[Memory Leak] Array size: ${this.leakyData.length} objects`);
       }
-    }, 50); // Fast interval to be noticeable in profiler
+    });
   }
 
-  ngOnDestroy() {
-    if (this.intervalid) clearInterval(this.intervalid);
-  }
+  // BUG: Missing ngOnDestroy cleanup
+  // ngOnDestroy() { 
+  //   /* We intentionally do not unsubscribe here! */ 
+  // }
 }

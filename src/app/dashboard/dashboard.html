@@ -36,14 +36,13 @@
         <!-- System Status (Thrashing Target) -->
         <div class="card">
             <h3>System Status</h3>
-            <div #thrashingTarget
-                style="background: #2a2a2a; padding: 1rem; border-radius: 8px; height: 150px; overflow: hidden; transition: none;">
-                <p>CPU Load: <strong>High</strong></p>
-                <p>Memory: <strong>Stable</strong></p>
+            <div style="background: #2a2a2a; padding: 1rem; border-radius: 8px; height: 150px; overflow: hidden;">
+                <p>CPU Load: <strong>Normal</strong></p>
+                <p>Memory: <strong style="color: #ef4444; animation: pulse 1s infinite;">RISING RAPIDLY</strong></p>
                 <p>Pump Pressure: <strong>12.4 PSI</strong></p>
 
                 <div style="margin-top: 1rem; font-size: 0.8rem; color: #666;">
-                    Analysis: Layout shifting detected...
+                    Alert: Garbage Collection limit approaching...
                 </div>
             </div>
         </div>
