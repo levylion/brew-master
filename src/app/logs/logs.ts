@@ -12,7 +12,7 @@ export class LogsComponent implements OnInit {
   logs: any[] = [];
 
   ngOnInit() {
-    this.generateLogs(10000); // BUG: Initial DOM Overload
+    this.generateLogs(20000); // BUG: massive DOM Overload
   }
 
   generateLogs(count: number) {
@@ -51,6 +51,17 @@ export class LogsComponent implements OnInit {
       case 'DEBUG': return '#a855f7';
       default: return '#ccc';
     }
+  }
+
+  // BUG: CPU Intensive task run in template!
+  calculateRiskFactor(id: number): number {
+    // Artificial lag: Busy wait
+    let start = performance.now();
+    while (performance.now() - start < 0.1) {
+      // Burn 0.1ms per item. 
+      // 20,000 items * 0.1ms = 2000ms (2 seconds) of pure CPU blocking on every check
+    }
+    return Math.random();
   }
 
   trackById(index: number, item: any): number {

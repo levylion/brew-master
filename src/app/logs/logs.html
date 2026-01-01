@@ -60,16 +60,16 @@
                             margin-top: 4px; 
                             background: #111; 
                             padding: 8px; 
-                            border-radius: 4px; 
-                            [style.border-left]="'2px solid ' + getSeverityColor(log.severity)" ">
+                            border-radius: 4px;" [style.border-left]="'2px solid ' + getSeverityColor(log.severity)"
+                    [attr.data-risk]="calculateRiskFactor(log.id)">
                     <div style=" color: var(--text-muted); margin-bottom: 4px;">Stack Trace:</div>
-                @for (line of log.stackTrace; track line) {
-                <div style="color: #666; padding-left: 8px;">{{line}}</div>
+                    @for (line of log.stackTrace; track line) {
+                    <div style="color: #666; padding-left: 8px;">{{line}}</div>
+                    }
+                </div>
                 }
             </div>
             }
         </div>
-        }
     </div>
-</div>
 </div>
