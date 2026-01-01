@@ -3,21 +3,25 @@
 
     <div class="card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <h3>Current Stock</h3>
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <h3 style="margin: 0; line-height: 1;">Current Stock</h3>
                 <button (click)="forceUpdate()" title="Force Refresh" style="
             background: none; 
             border: 1px solid var(--border-color); 
             cursor: pointer; 
-            padding: 4px 8px; 
+            padding: 2px 6px; 
             border-radius: 4px;
             color: var(--text-color);
             transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 24px;
+            width: 24px;
         ">
-                    🔄
+                    <span style="font-size: 14px; line-height: 1;">🔄</span>
                 </button>
             </div>
-
             <div style="display: flex; align-items: center; gap: 10px;">
                 <label style="cursor: pointer; display: flex; align-items: center; gap: 8px;">
                     <input #autoRefreshToggle type="checkbox" [checked]="autoRefreshEnabled">
