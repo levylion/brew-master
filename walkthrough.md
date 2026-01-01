@@ -32,7 +32,8 @@
 ### 4. Change Detection (Inventory)
 *   **Scenario**: Monitoring stock arriving in real-time.
 *   **Bugs**:
-    *   **UI Freeze (OnPush Mutation)**: The component uses `ChangeDetectionStrategy.OnPush` but updates the stock list by pushing to an existing array (mutation) instead of creating a new reference. As a result, new items arrive in the background (visible in console), but the UI does not update.
+    *   **Visual Trap (Auto Refresh)**: The page features an "Auto Refresh" toggle. When enabled, the user expects the list to update automatically as new items arrive. However, due to the bug, enabling this toggle does nothing visible, acting as a red herring.
+    *   **Resolution**: Clicking the small "Refresh" icon 🔄 triggers a manual change detection cycle, momentarily updating the list. The Fix is to use spread syntax `[...this.items, newItem]` or `markForCheck()`.
 
 ### 5. Network (Sensors)
 *   **Scenario**: Monitoring realtime fermentation data.
@@ -60,5 +61,5 @@ Ask the Chrome DevTools MCP Agent to:
 
 2.  "Analyze the Dashboard performance and find the memory leak."
 3.  "Fix the visual bugs and security issues in the Recipe page."
-4.  "Investigate why the Inventory list isn't updating."
+4.  "Enable the 'Auto Refresh' on the Inventory page and explain why it's not working."
 5.  "Debug why the Sensor page is showing an error."

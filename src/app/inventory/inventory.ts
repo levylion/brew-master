@@ -14,9 +14,15 @@ export class InventoryComponent implements OnInit, OnDestroy {
   items: string[] = ['25kg Pale Malt', '10kg Wheat Malt', '5kg Crystal 60L'];
   intervalId: any;
   lastAdded: string = 'None';
+  autoRefreshEnabled: boolean = false;
 
   ngOnInit() {
     this.startRestocking();
+  }
+
+  toggleAutoRefresh() {
+    this.autoRefreshEnabled = !this.autoRefreshEnabled;
+    // Even if enabled, the array mutation bug prevents updates!
   }
 
   startRestocking() {
